@@ -1,0 +1,27 @@
+const client = require('./client');
+const mongoose = require('mongoose');
+require('dotenv').config();
+
+const { 
+    registerCommands, 
+    registerEvents,
+    registerInteractions
+  } = require('../utils/register');
+
+  mongoose.connect(process.env.MONGODB_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+  }).then(connection => {
+    console.log(`Connected to MongoDB`)
+  }).catch(err => {
+    if (err) throw err;
+  });
+
+(async () => {
+    
+    await registerCommands(client, '../commands');
+    await registerEvents(client, '../events');
+    await registerInteractions(client, '../buttons')
+    await registerInteractions(client, '../select-menus')
+    await client.login(process.env.DISCORD_BOT_TOKEN);
+  })();
