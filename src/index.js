@@ -18,7 +18,6 @@ const {
   });
 
 (async () => {
-    
     await registerCommands(client, '../commands');
     await registerEvents(client, '../events');
     await registerInteractions(client, '../buttons')
