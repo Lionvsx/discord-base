@@ -42,7 +42,6 @@ module.exports = class ReadyEvent extends BaseEvent {
                 })
             }
         }
-        client.error('Test')
         client.log('Started refreshing application (/) commands.');
         for (const [key, value] of client.guilds.cache) {
             const guild = await client.guilds.cache.get(key)
@@ -56,7 +55,7 @@ module.exports = class ReadyEvent extends BaseEvent {
                             await client.application.commands.set(commands, guild.id)
                             client.log(`Loaded ${commands.length} (/) commands for guild ${guild.name}`)
                         } catch (err) {
-                            console.error(err)
+                            client.error(`Failed setting application commands`, err)
                         }
                     } else await guild.commands.set([])
                     

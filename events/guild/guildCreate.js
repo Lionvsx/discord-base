@@ -11,8 +11,8 @@ module.exports = class guildCreateEvent extends BaseEvent {
             guildId: guild.id,
             guildName: guild.name
         }, async (err) => {
-            if (err) throw err && console.log(`There was an error trying to save GUILD : ${guild.name} to the database !`)
-            else console.log(`Bot ${client.user.username} joined GUILD : ${guild.name} !`)
+            if (err) throw err && client.log(`There was an error trying to save GUILD : ${guild.name} to the database !`)
+            else client.log(`Bot ${client.user.username} joined GUILD : ${guild.name} !`)
         }) 
     }
 }

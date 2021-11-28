@@ -8,11 +8,11 @@ module.exports = class guildDeleteEvent extends BaseEvent {
 
     async run(client, guild) {
         const DBGuild = await Guild.findOne({ guildId: guild.id });
-        if (!DBGuild) throw new Error(`Leaving a guild not stored in Database !`)
+        if (!DBGuild) return client.error(`Leaving a guild not stored in Database !`);
         else {
             await Guild.deleteOne({guildId: guild.id}, async (err) => {
                 if (err) throw err;
-                else console.log(`Bot ${client.user.username} left GUILD : ${guild.name} !`);
+                else client.log(`Bot ${client.user.username} left GUILD : ${guild.name} !`);
             });
         }
     }
