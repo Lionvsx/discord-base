@@ -1,5 +1,5 @@
 const client = require('./client');
-const mongoose = require('mongoose');
+const {connect} = require('mongoose');
 require('dotenv').config();
 
 const { 
@@ -8,7 +8,7 @@ const {
     registerInteractions
   } = require('../utils/register');
 
-  mongoose.connect(process.env.MONGODB_URI, {
+  connect(process.env.MONGODB_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true
   }).then(connection => {

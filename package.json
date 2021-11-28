@@ -25,6 +25,7 @@
     "emoji-regex": "^10.0.0",
     "fs": "^0.0.1-security",
     "fs-extra": "^10.0.0",
-    "mongoose": "^6.0.12"
+    "mongoose": "^6.0.12",
+    "winston": "^3.3.3"
   }
 }

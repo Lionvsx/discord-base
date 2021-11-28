@@ -1,4 +1,7 @@
-const { Client, Intents, Options } = require('discord.js');
+const { Client, Intents, Options, Interaction, Message, TextChannel } = require('discord.js');
+require('dotenv').config();
+const Logger = require('../utils/services/logger')
+
 
 class client extends Client {
     constructor(homeGuildId) {
@@ -20,15 +23,52 @@ class client extends Client {
                 'REACTION', 
                 'GUILD_MEMBER'
             ], 
-            makeCache: Options.cacheWithLimits(Options.defaultMakeCacheSettings),
-            autoReconnect: true
+            makeCache: Options.cacheWithLimits(Options.defaultMakeCacheSettings)
         })
         this.homeGuildId = homeGuildId
         this.commands = new Map();
         this.interactions = new Map();
-        this.aliases = new Map();
         this.config = new Map();
+        this.consoleLogger = new Logger('client');
+        this.loadingEmoji = undefined;
     }
-}
 
-module.exports = new client();
+    /**
+     *
+     * @param message {String}
+     * @param logData {JSON}
+     */
+    log(message, logData = undefined) {
+        logData ? this.consoleLogger.log(message, 'info') : this.consoleLogger.log(message, 'info', logData);
+    }
+    error(message, logData = undefined) {
+        logData ? this.consoleLogger.log(message, 'error') : this.consoleLogger.log(message, 'error', logData);
+    }
+    warning(message, logData = undefined) {
+        logData ? this.consoleLogger.log(message, 'warn') : this.consoleLogger.log(message, 'warn', logData);
+    }
+    replySuccess(object, content) {
+        const successEmoji = this.emojis.cache.get('') ?? '✅';
+        if (object instanceof Interaction) return object.reply(`**${successEmoji} | **${content}`)
+        if (object instanceof Message) return object.reply(`**${successEmoji} | **${content}`)
+        if (object instanceof TextChannel) return object.send(`**${successEmoji} | **${content}`)
+    }
+
+    replyError(object, content) {
+        const errorEmoji = this.emojis.cache.get('') ?? '❌';
+        if (object instanceof Interaction) return object.reply(`**${errorEmoji} | **${content}`)
+        if (object instanceof Message) return object.reply(`**${errorEmoji} | **${content}`)
+        if (object instanceof TextChannel) return object.send(`**${errorEmoji} | **${content}`)
+    }
+
+    replyWarning(object, content) {
+        const warningEmoji = this.emojis.cache.get('') ?? '⚠';
+        if (object instanceof Interaction) return object.reply(`**${warningEmoji} | **${content}`)
+        if (object instanceof Message) return object.reply(`**${warningEmoji} | **${content}`)
+        if (object instanceof TextChannel) return object.send(`**${warningEmoji} | **${content}`)
+    }
+
+
+}
+const discordClient = new client(process.env.HOMEGUILDID);
+module.exports = discordClient;

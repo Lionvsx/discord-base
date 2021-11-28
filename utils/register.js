@@ -14,16 +14,13 @@ async function registerCommands(client, dir = '') {
   const files = await fs.readdir(filePath);
   for (const file of files) {
     const stat = await fs.lstat(path.join(filePath, file));
-    if (stat.isDirectory()) registerCommands(client, path.join(dir, file));
+    if (stat.isDirectory()) await registerCommands(client, path.join(dir, file));
     if (file.endsWith('.js')) {
       const Command = require(path.join(filePath, file));
       if (Command.prototype instanceof BaseCommand) {
         const cmd = new Command();
         table.addRow(`${cmd.name}.js`,'✅')
-        cmd.aliases.forEach(alias => {
-          client.aliases.set(alias, cmd)
-        })
-        client.commands.set(cmd.name, cmd);
+        await client.commands.set(cmd.name, cmd);
         if (!cmd.name && cmd.help) {
           table.addRow(`${cmd.name}.js`, '❌ -> Error in the structure')
         }
@@ -37,7 +34,7 @@ async function registerEvents(client, dir = '') {
   const files = await fs.readdir(filePath);
   for (const file of files) {
     const stat = await fs.lstat(path.join(filePath, file));
-    if (stat.isDirectory()) registerEvents(client, path.join(dir, file));
+    if (stat.isDirectory()) await registerEvents(client, path.join(dir, file));
     if (file.endsWith('.js')) {
       const Event = require(path.join(filePath, file));
       if (Event.prototype instanceof BaseEvent) {
@@ -53,7 +50,7 @@ async function registerInteractions(client, dir = '') {
   const files = await fs.readdir(filePath);
   for (const file of files) {
     const stat = await fs.lstat(path.join(filePath, file));
-    if (stat.isDirectory()) registerInteractions(client, path.join(dir, file));
+    if (stat.isDirectory()) await registerInteractions(client, path.join(dir, file));
     if (file.endsWith('.js')) {
       const Interaction = require(path.join(filePath, file));
       if (Interaction.prototype instanceof BaseInteraction) {
@@ -69,12 +66,12 @@ async function registerInteractions(client, dir = '') {
 }
 
 async function showCommandLoad() {
-  if (table.__rows.length != 0) {
+  if (table.__rows.length !== 0) {
     console.log(table.toString());
   } else {
     console.log(`No commands to load !`)
   }
-  if (interactionTable.__rows.length != 0) {
+  if (interactionTable.__rows.length !== 0) {
     console.log(interactionTable.toString());
   } else {
     console.log(`No interactions to load !`)

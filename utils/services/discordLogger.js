@@ -1,6 +1,12 @@
 const { MessageEmbed } = require("discord.js");
 const { getDateTime } = require('../../functions/systemFunctions');
 
+const categoryColorMap = new Map([
+    ['config', ''],
+    ['tickets', ''],
+    ['database', '']
+])
+
 class LoggerService {
     constructor(category, defaultColor) {
         this.logData = null;
@@ -10,20 +16,18 @@ class LoggerService {
         this.guild = null;
         this.logChannel = null;
 
-        const createLogEmbed = (message, color, level) => {
+        this.createLogEmbed = (message, color, level) => {
             const logEmbed = new MessageEmbed()
                 .setColor(color)
 
-            this.logData 
-                ? logEmbed.setDescription(`\`\`\`${getDateTime()} | ${level.toUpperCase()} | ${this.category.toUpperCase()}\`\`\`\n${message}\n\`\`\`\n${this.logData}\`\`\``) 
+            this.logData
+                ? logEmbed.setDescription(`\`\`\`${getDateTime()} | ${level.toUpperCase()} | ${this.category.toUpperCase()}\`\`\`\n${message}\n\`\`\`\n${this.logData}\`\`\``)
                 : logEmbed.setDescription(`\`\`\`${getDateTime()} | ${level.toUpperCase()} | ${this.category.toUpperCase()}\`\`\`\n${message}`);
             this.logMember
                 ? logEmbed.setAuthor(this.logMember.user.tag, this.logMember.user.displayAvatarURL())
                 : null;
             return logEmbed
         }
-
-        this.createLogEmbed = createLogEmbed
     }
 
     setLogData(logData) {
@@ -62,8 +66,5 @@ class LoggerService {
     }
 }
 
-class BaseLog {
-
-}
 
 module.exports = LoggerService;
