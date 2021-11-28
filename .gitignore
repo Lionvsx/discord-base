@@ -105,3 +105,6 @@ dist
 
 #IDE Settings
 .idea
+
+#Logs
+/logs
