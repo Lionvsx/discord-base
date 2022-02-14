@@ -1,4 +1,4 @@
-const { Client, Intents, Options, Interaction, Message, TextChannel } = require('discord.js');
+const { Client, Intents, Options, Interaction, Message, TextChannel, DMChannel} = require('discord.js');
 require('dotenv').config();
 const Logger = require('../utils/services/logger')
 
